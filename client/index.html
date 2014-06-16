@@ -3,23 +3,74 @@
   <head>
     <meta charset="utf-8">
     <title>chatterbox</title>
-    <link rel="stylesheet" href="styles/styles.css">
+     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
 
-    <!-- dependencies -->
+    <!-- Bootstrap theme -->
+    <link href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <link href="styles/styles.css" rel="stylesheet">
+
+    <!-- Dependencies -->
     <script src="bower_components/jquery/jquery.min.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
-    <!-- your scripts -->
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Our scripts -->
     <script src="scripts/config.js"></script>
     <script src="scripts/app.js"></script>
+
   </head>
   <body>
-    <div id="main">
-      <h1>chatterbox</h1>
-      <ul id="roomSelect">
-      </ul>
-      <ul id="chats">
-
-      </ul>
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">ChatterBox</a>
+        </div>
+      </div>
     </div>
+
+    <div class="container">
+      <div class="row">
+
+        <div class="info col-md-3">
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title visitor"></h3>
+            </div>
+            <div class="panel-body following-panel">
+              <div>
+                <p>Rooms:</p>
+                <ul class="following" id="roomSelect">
+                </ul>
+              </div>
+              <a href="#" class="see-all">See all Messages</a>
+            </div>
+          </div>
+
+          <div class="well clearfix">
+            <textarea placeholder="Compose a New Message" class="compose-chat"></textarea> <button class=" btn btn-info chat-button">Send</button>
+          </div>
+
+        </div>
+
+        <div class="chats-container col-md-9">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">All Messages</h3>
+            </div>
+            <div class="panel-body chat-panel">
+              <a href="#" class="new_chats">Load <span></span> New Messages</a>
+              <div class="chats" id="chats"></div>
+            </div>
+          </div>
+
+        </div>
+
+      </div> <!-- /row -->
+    </div> <!-- /container -->
   </body>
 </html>

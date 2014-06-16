@@ -9,6 +9,10 @@ var app = {
 
   init: function(){
     this.server = 'https://api.parse.com/1/classes/chatterbox';
+    setInterval(function(){
+      app.fetch();
+      console.log('refreshed');
+    }, 1000);
   },
 
   send: function(message){
