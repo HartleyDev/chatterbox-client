@@ -32,8 +32,9 @@ var app = {
       type: 'GET',
       success: function(data) {
         app.clearMessages();
+        app.clearRooms();
         app.addRooms(data.results);
-        //app.addMessages(data.results);
+        app.addMessages(data.results);
 
         //iterate through messages
       }
@@ -51,24 +52,32 @@ var app = {
   },
 
   addMessage: function(message) {
-    $('#chats').append('<li>'+ message.username + ': ' + message.text + '</li>');
+    $('<li>').text( message.username + ': ' + message.text ).appendTo('#chats');
+  },
+
+  clearRooms: function(){
+    $('#roomSelect').html('');
   },
 
   addRoom: function(room){
-    $('#roomSelect').append('<li>' + room + '</li>');
+    $('<li>').text(room).appendTo('#roomSelect');
   },
 
   addRooms: function(messagesArr){
     var rooms = _.uniq(_.pluck(messagesArr, 'roomname'));
+    var unNamed = false;
     for(var i = 0; i < rooms.length; i++){
-      if(rooms[i] === undefined || rooms[i] === null || rooms[i] === ''){
-        app.addRoom('default');
-      } else {
+      if(rooms[i]){
         app.addRoom(rooms[i]);
+      }else {
+        unNamed = true;
       }
+    }
+    if(unNamed){
+      app.addRoom('default');
     }
   }
 };
 
-// app.send(app.message);
-// app.fetch();
+app.init();
+app.fetch();
