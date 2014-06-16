@@ -6,16 +6,14 @@ var app = {
     'text': 'test',
     'roomname': 'shawndrew room'
   },
-  clearMessages: function() {
-    $('#chats').html('');
+
+  init: function(){
+    this.server = 'https://api.parse.com/1/classes/chatterbox';
   },
-  addMessage: function(message) {
-    $('#chats').append('li').html(message.username + ': ' + message.text);
-  },
-  init: function(){},
+
   send: function(message){
     $.ajax({
-      url: 'https://api.parse.com/1/classes/chatterbox',
+      url: this.server,
       type: 'POST',
       data: JSON.stringify(message),
       contentType: 'application/json',
@@ -27,16 +25,48 @@ var app = {
       }
     });
   },
+
   fetch: function(){
     $.ajax({
-      url: 'https://api.parse.com/1/classes/chatterbox',
+      url: this.server,
       type: 'GET',
       success: function(data) {
         app.clearMessages();
-        app.addMessage(data.results[0]);
+        app.addRooms(data.results);
+        //app.addMessages(data.results);
+
         //iterate through messages
       }
     });
+  },
+
+  clearMessages: function() {
+    $('#chats').html('');
+  },
+
+  addMessages: function(messageArr){
+    for(var i = 0; i < messageArr.length; i++){
+      app.addMessage(messageArr[i]);
+    }
+  },
+
+  addMessage: function(message) {
+    $('#chats').append('<li>'+ message.username + ': ' + message.text + '</li>');
+  },
+
+  addRoom: function(room){
+    $('#roomSelect').append('<li>' + room + '</li>');
+  },
+
+  addRooms: function(messagesArr){
+    var rooms = _.uniq(_.pluck(messagesArr, 'roomname'));
+    for(var i = 0; i < rooms.length; i++){
+      if(rooms[i] === undefined || rooms[i] === null || rooms[i] === ''){
+        app.addRoom('default');
+      } else {
+        app.addRoom(rooms[i]);
+      }
+    }
   }
 };
 
