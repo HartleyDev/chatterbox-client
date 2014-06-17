@@ -3,9 +3,9 @@ var app = {
   //INIT & AJAX METHODS
   init: function(){
     this.server = 'https://api.parse.com/1/classes/chatterbox';
-    app.fetch();
+    app.fetch(app.enterRoom);
     setInterval(function(){
-      app.fetch();
+      app.fetch(app.enterRoom);
     }, 1000);
   },
 
@@ -24,19 +24,18 @@ var app = {
     });
   },
 
-  fetch: function(){
+  fetch: function(callback){
     $.ajax({
       url: this.server,
       type: 'GET',
-      data: {order: '-createdAt', limit: 50},
+      data: {order: '-createdAt'},
       success: function(data) {
-        app.clearMessages();
-        app.clearRooms();
-        app.addRooms(data.results);
-        app.addMessages(data.results);
+        callback(data.results);
       }
     });
   },
+
+  currentRoom: null,
 
   //MESSAGES FUNCTIONS
   handleSubmit: function(){
@@ -73,21 +72,40 @@ var app = {
   },
 
   addRoom: function(room){
-    $('<li>').text(room).appendTo('#roomSelect');
+    // $('#roomSelect').append('<li><a href="" class="room"></a></li>').append('a').text(room);
+    var $link = $('<a href="" class="room">').text(room);
+    $('#roomSelect').append('<li>').append($link);
   },
 
   addRooms: function(messagesArr){
     var rooms = _.uniq(_.pluck(messagesArr, 'roomname'));
-    var unNamed = false;
+
     for(var i = 0; i < rooms.length; i++){
       if(rooms[i]){
         app.addRoom(rooms[i]);
-      }else {
-        unNamed = true;
       }
     }
-    if(unNamed){
-      app.addRoom('default');
+  },
+
+  enterRoom: function(messageArr) {
+    if (app.currentRoom === null) {
+      app.clearMessages();
+      app.clearRooms();
+      app.addRooms(messageArr);
+      app.addMessages(messageArr);
+    } else {
+      app.clearRooms();
+      app.addRooms(messageArr);
+
+      app.clearMessages();
+      var roomMessages = [];
+      //loop through messageArr, and only display the ones whose "roomname" property matches app.currentRoom
+      for (var i = 0; i < messageArr.length; i++) {
+        if (messageArr[i].roomname === app.currentRoom) {
+          roomMessages.push(messageArr[i]);
+        }
+      }
+      app.addMessages(roomMessages);
     }
   }
 }; //end of app object
@@ -115,6 +133,14 @@ $(document).ready(function(){
       app.send({username: 'admin', text: 'Created New Room: ' + room, roomname: room });
     }
     $('.new-room').val('');
+  });
+
+  //Set currentRoom value and switch to that room
+  $('#roomSelect').on('click', 'a', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    app.currentRoom = $(this).text();
+    app.fetch(app.enterRoom);
   });
 
   //GLOBAL FUNCTIONS
