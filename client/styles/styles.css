@@ -104,3 +104,8 @@ h3 {
     float: right;
     margin-bottom: -5px;
 }
+
+.new-room-form {
+    padding-bottom: 15px;
+    padding-left: 12px;
+}

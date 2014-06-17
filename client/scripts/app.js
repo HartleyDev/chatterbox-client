@@ -1,4 +1,3 @@
-// YOUR CODE HERE:
 $(document).ready(function(){
   var app = {
 
@@ -62,7 +61,7 @@ $(document).ready(function(){
     },
 
     addMessage: function(message) {
-      $('<li>').text( message.username + ': ' + message.text ).appendTo('#chats');
+      $('<div class="chat">').text( message.username + ': ' + message.text ).appendTo('#chats');
     },
 
     clearRooms: function(){
