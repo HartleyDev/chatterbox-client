@@ -47,15 +47,18 @@
                 </ul>
               </div>
               <form class="form-inline new-room-form" role="form">
-                <input class="form-control" type="text" name="room" placeholder="New Room" />
-                <button class="btn btn-info btn-sm room-button">Create</button>
+                <input class="form-control new-room" type="text" name="room" placeholder="New Room" />
+                <button class="btn btn-info btn-sm room-button" type="submit">Create</button>
               </form>
             </div>
 
           </div>
 
           <div class="well clearfix">
-            <textarea placeholder="Compose a New Message" class="compose-chat"></textarea> <button class=" btn btn-info chat-button">Send</button>
+            <form id="send" class="submit">
+              <textarea id="message" placeholder="Compose a New Message" class="compose-chat"></textarea>
+              <button class="btn btn-info chat-button" type="submit">Send</button>
+            </form>
           </div>
 
         </div>
